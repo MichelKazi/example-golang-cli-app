@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"unsafe"
 )
 
 type JsonStruct struct {
@@ -34,7 +35,7 @@ var jsonString = `{
 	"c": "d",
 	"e": "f"
   },
-  "string": "Hello World"
+  "string": "ዩኒኮድ ወረጘ የጝ?"
 }`
 
 func main() {
@@ -46,9 +47,7 @@ func main() {
 
 	json.Unmarshal([]byte(jsonString), &jsonStruct)
 
-	fmt.Println(fmt.Sprintf("%+v", jsonStruct))
-
-	fmt.Println(jsonStruct.Object.A)
+	fmt.Print(len(jsonString), unsafe.Sizeof(jsonString))
 
 	for i, v := range stringSlice {
 		fmt.Println(i, v)
