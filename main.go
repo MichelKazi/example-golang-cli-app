@@ -39,9 +39,18 @@ var jsonString = `{
 
 func main() {
 	var jsonStruct JsonStruct
+
+	stringSlice := []string{"dahlia", "toad", "phil", "doro", "doro"}
+
+	stringSlice = append(stringSlice, "jeffry", "test")
+
 	json.Unmarshal([]byte(jsonString), &jsonStruct)
 
 	fmt.Println(fmt.Sprintf("%+v", jsonStruct))
 
 	fmt.Println(jsonStruct.Object.A)
+
+	for i, v := range stringSlice {
+		fmt.Println(i, v)
+	}
 }
