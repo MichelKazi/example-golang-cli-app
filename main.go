@@ -5,6 +5,21 @@ import (
 	"fmt"
 )
 
+type JsonStruct struct {
+	Array   []int       `json:"array"`
+	Boolean bool        `json:"boolean"`
+	Null    interface{} `json:"null"`
+	Number  int         `json:"number"`
+	Object  ObjectMap   `json:"object"`
+	String  string      `json:"string"`
+}
+
+type ObjectMap struct {
+	A string `json:"a"`
+	C string `json:"c"`
+	E string `json:"e"`
+}
+
 var jsonString = `{
   "array": [
 	1,
@@ -23,10 +38,10 @@ var jsonString = `{
 }`
 
 func main() {
-	var jsonMap = make(map[string]interface{})
-	json.Unmarshal([]byte(jsonString), &jsonMap)
+	var jsonStruct JsonStruct
+	json.Unmarshal([]byte(jsonString), &jsonStruct)
 
-	for key, value := range jsonMap {
-		fmt.Println(key, value)
-	}
+	fmt.Println(fmt.Sprintf("%+v", jsonStruct))
+
+	fmt.Println(jsonStruct.Object.A)
 }
