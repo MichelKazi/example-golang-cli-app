@@ -2,39 +2,53 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
-	"github.com/protoworlock69/hello-world/parishiltonlongback"
+	cowsay "github.com/Code-Hex/Neo-cowsay"
+	"github.com/gin-gonic/gin"
 )
 
-type FakeStruct struct {
-	Name     string
-	Age      int
-	Height   float64
-	username string
-	password string
-}
-
-func (f *FakeStruct) setPassword(password string) {
-	f.password = password
-}
-
-func (f *FakeStruct) SetPassword(password string) {
-	f.setPassword(password)
-}
-
 func main() {
-	fmt.Println("Hello world")
-	PrintHelloWorld()
-	aFunction()
-	fakeStruct := FakeStruct{Name: "Maggs"}
-	fakeStruct.SetPassword("Who cares")
-	parishiltonlongback.Longback()
+	logo, _ := cowsay.Say(cowsay.Phrase("Bad Ass MF REST API v4.2.0"), cowsay.Aurora())
+	fmt.Println(logo)
+	r := gin.Default()
+
+	r.LoadHTMLGlob("templates/*")
+
+	apiV1 := r.Group("api/v1")
+	{
+		apiV1.GET("/cow/:phrase", cowHandler)
+
+		apiV1.GET("/ping", func(c *gin.Context) {
+			c.JSON(200, gin.H{
+				"message": "pong",
+			})
+		})
+	}
+
+	apiV2 := r.Group("api/v2")
+	{
+		apiV2.GET("/cow/:phrase/:title", cowV2Handler)
+	}
+
+	r.Run()
 }
 
-func AFunction() {
-	aFunction()
+func cowHandler(c *gin.Context) {
+	phrase := c.Param("phrase")
+	cow, _ := cowsay.Say(cowsay.Phrase(phrase))
+	c.HTML(http.StatusOK, "index.tmpl", gin.H{
+		"title":  phrase,
+		"phrase": cow,
+	})
 }
 
-func aFunction() {
-	fmt.Println("Private function")
+func cowV2Handler(c *gin.Context) {
+	phrase := c.Param("phrase")
+	title := c.Param("title")
+	cow, _ := cowsay.Say(cowsay.Phrase(phrase))
+	c.HTML(http.StatusOK, "index.tmpl", gin.H{
+		"title":  title,
+		"phrase": cow,
+	})
 }
